@@ -17,7 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 const preferenceOptions = [
@@ -53,11 +53,11 @@ const steps = [
 
 export default function PlanPage() {
   const router = useRouter();
-  const { mutate, isPending, isError, error } = usePlanTrip();
+  const { isPending } = usePlanTrip();
   const [currentStep, setCurrentStep] = useState(1);
   const [isStreaming, setIsStreaming] = useState(false);
   const [completedNodes, setCompletedNodes] = useState<string[]>([]);
-  const [streamError, setStreamError] = useState<string | null>(null);
+
 
   const [form, setForm] = useState<TravelRequest>({
     origin: "",
@@ -99,7 +99,7 @@ export default function PlanPage() {
 
   const handleStreamSubmit = async () => {
     setIsStreaming(true);
-    setStreamError(null);
+
     setCompletedNodes([]);
     
     try {
@@ -159,7 +159,9 @@ export default function PlanPage() {
       
     } catch (err: any) {
        console.error(err);
-       setStreamError(err.message || "An error occurred during planning.");
+       toast.error("Pipeline Error", {
+         description: err.message || "An error occurred during planning.",
+       });
        setIsStreaming(false);
     }
   };
@@ -244,21 +246,7 @@ export default function PlanPage() {
           })}
         </div>
 
-        {/* Error Banner */}
-        {(isError || streamError) && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-6"
-          >
-            <Alert variant="destructive">
-              <AlertDescription>
-                <strong>Error:</strong>{" "}
-                {streamError || (error as Error)?.message || "Something went wrong. Please try again."}
-              </AlertDescription>
-            </Alert>
-          </motion.div>
-        )}
+
 
         {/* Form Steps */}
         <Card className="glass-card border-0 ring-0">
