@@ -10,6 +10,9 @@ import {
   HiOutlineClock,
   HiOutlineCurrencyDollar,
 } from "react-icons/hi2";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 const features = [
   {
@@ -98,7 +101,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-muted mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-muted-foreground mb-8">
               <HiOutlineSparkles className="w-4 h-4 text-accent" />
               <span>Powered by AI Agents</span>
             </div>
@@ -116,7 +119,7 @@ export default function Home() {
           </motion.h1>
 
           <motion.p
-            className="text-lg sm:text-xl text-muted max-w-2xl mx-auto mb-10 leading-relaxed"
+            className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
@@ -132,12 +135,21 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
           >
-            <Link href="/plan" className="btn-primary text-lg py-4! px-8! rounded-xl! animate-pulse-glow">
-              Start Planning →
-            </Link>
-            <a href="#features" className="btn-secondary text-lg py-4! px-8! rounded-xl!">
-              How It Works
-            </a>
+            <Button
+              size="lg"
+              className="btn-primary border-0 h-auto text-lg py-4 px-8 rounded-xl animate-pulse-glow"
+              asChild
+            >
+              <Link href="/plan">Start Planning →</Link>
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              className="h-auto text-lg py-4 px-8 rounded-xl border-card-border hover:border-accent hover:bg-accent-glow text-foreground"
+              asChild
+            >
+              <a href="#features">How It Works</a>
+            </Button>
           </motion.div>
         </div>
       </section>
@@ -156,7 +168,7 @@ export default function Home() {
               Everything You Need,{" "}
               <span className="gradient-text">One Click Away</span>
             </h2>
-            <p className="text-muted text-lg max-w-xl mx-auto">
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
               Our AI agent pipeline handles the heavy lifting so you can focus
               on the excitement.
             </p>
@@ -170,24 +182,24 @@ export default function Home() {
             viewport={{ once: true }}
           >
             {features.map((feature) => (
-              <motion.div
-                key={feature.title}
-                className="glass-card p-6"
-                variants={fadeUp}
-              >
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-                  style={{ background: `${feature.color}15` }}
-                >
-                  <feature.icon
-                    className="w-6 h-6"
-                    style={{ color: feature.color }}
-                  />
-                </div>
-                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                <p className="text-muted text-sm leading-relaxed">
-                  {feature.description}
-                </p>
+              <motion.div key={feature.title} variants={fadeUp}>
+                <Card className={cn("glass-card border-0 ring-0 h-full")}>
+                  <CardContent className="pt-6">
+                    <div
+                      className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                      style={{ background: `${feature.color}15` }}
+                    >
+                      <feature.icon
+                        className="w-6 h-6"
+                        style={{ color: feature.color }}
+                      />
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {feature.description}
+                    </p>
+                  </CardContent>
+                </Card>
               </motion.div>
             ))}
           </motion.div>
@@ -198,28 +210,33 @@ export default function Home() {
       <section className="py-24 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
-            className="glass-card p-12 sm:p-16 relative overflow-hidden"
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            {/* Background glow */}
-            <div className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-accent/10 blur-[80px]" />
-            <div className="absolute -bottom-20 -left-20 w-60 h-60 rounded-full bg-teal/10 blur-[80px]" />
+            <Card className={cn("glass-card border-0 ring-0 relative overflow-hidden")}>
+              {/* Background glow */}
+              <div className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-accent/10 blur-[80px]" />
+              <div className="absolute -bottom-20 -left-20 w-60 h-60 rounded-full bg-teal/10 blur-[80px]" />
 
-            <div className="relative">
-              <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-                Ready to <span className="gradient-text">Explore?</span>
-              </h2>
-              <p className="text-muted text-lg mb-8 max-w-lg mx-auto">
-                Tell us where you want to go and let our AI agents handle the
-                rest. Your perfect trip is just a few clicks away.
-              </p>
-              <Link href="/plan" className="btn-primary text-lg py-4! px-10! rounded-xl!">
-                Plan My Trip →
-              </Link>
-            </div>
+              <CardContent className="relative pt-12 pb-12 sm:pt-16 sm:pb-16">
+                <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+                  Ready to <span className="gradient-text">Explore?</span>
+                </h2>
+                <p className="text-muted-foreground text-lg mb-8 max-w-lg mx-auto">
+                  Tell us where you want to go and let our AI agents handle the
+                  rest. Your perfect trip is just a few clicks away.
+                </p>
+                <Button
+                  size="lg"
+                  className="btn-primary border-0 h-auto text-lg py-4 px-10 rounded-xl"
+                  asChild
+                >
+                  <Link href="/plan">Plan My Trip →</Link>
+                </Button>
+              </CardContent>
+            </Card>
           </motion.div>
         </div>
       </section>

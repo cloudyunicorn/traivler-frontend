@@ -13,6 +13,11 @@ import {
   HiOutlineArrowRight,
   HiOutlineArrowLeft,
 } from "react-icons/hi2";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { cn } from "@/lib/utils";
 
 const preferenceOptions = [
   { id: "beach", label: "🏖️ Beach" },
@@ -87,7 +92,6 @@ export default function PlanPage() {
   const handleSubmit = () => {
     mutate(form, {
       onSuccess: (data) => {
-        // Store the result in sessionStorage for the results page
         sessionStorage.setItem("tripResult", JSON.stringify(data));
         sessionStorage.setItem("tripRequest", JSON.stringify(form));
         router.push("/results");
@@ -107,7 +111,7 @@ export default function PlanPage() {
             Planning your trip to{" "}
             <span className="gradient-text">{form.destination}</span>
           </h2>
-          <p className="text-muted mb-8">
+          <p className="text-muted-foreground mb-8">
             Our AI agents are working in parallel to find the best options…
           </p>
           <LoadingSpinner />
@@ -128,7 +132,7 @@ export default function PlanPage() {
           <h1 className="text-3xl sm:text-4xl font-bold mb-2">
             Plan Your <span className="gradient-text">Perfect Trip</span>
           </h1>
-          <p className="text-muted">
+          <p className="text-muted-foreground">
             Tell us about your dream trip and our AI will handle the rest.
           </p>
         </motion.div>
@@ -141,25 +145,29 @@ export default function PlanPage() {
             const isComplete = currentStep > step.id;
             return (
               <div key={step.id} className="flex items-center gap-2">
-                <button
+                <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={() => {
                     if (isComplete) setCurrentStep(step.id);
                   }}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  disabled={!isComplete && !isActive}
+                  className={cn(
+                    "flex items-center gap-2 px-4 py-2 h-auto rounded-full text-sm font-medium transition-all",
                     isActive
-                      ? "bg-accent text-white"
+                      ? "bg-accent text-white hover:bg-accent/90"
                       : isComplete
-                      ? "bg-accent/20 text-accent cursor-pointer"
-                      : "bg-card text-muted-dark"
-                  }`}
+                      ? "bg-accent/20 text-accent hover:bg-accent/30 cursor-pointer"
+                      : "bg-card text-muted-foreground"
+                  )}
                 >
                   <StepIcon className="w-4 h-4" />
                   {step.title}
-                </button>
+                </Button>
                 {i < steps.length - 1 && (
                   <div
                     className={`w-8 h-px ${
-                      isComplete ? "bg-accent" : "bg-card-border"
+                      isComplete ? "bg-accent" : "bg-border"
                     }`}
                   />
                 )}
@@ -173,229 +181,250 @@ export default function PlanPage() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm"
+            className="mb-6"
           >
-            <strong>Error:</strong>{" "}
-            {error?.message || "Something went wrong. Please try again."}
+            <Alert variant="destructive">
+              <AlertDescription>
+                <strong>Error:</strong>{" "}
+                {error?.message || "Something went wrong. Please try again."}
+              </AlertDescription>
+            </Alert>
           </motion.div>
         )}
 
         {/* Form Steps */}
-        <div className="glass-card p-8">
-          <AnimatePresence mode="wait">
-            {/* Step 1: Where */}
-            {currentStep === 1 && (
-              <motion.div
-                key="step1"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
-                className="space-y-6"
-              >
-                <div>
-                  <label
-                    htmlFor="origin"
-                    className="block text-sm font-medium text-muted mb-2"
-                  >
-                    From
-                  </label>
-                  <input
-                    id="origin"
-                    type="text"
-                    className="input-field"
-                    placeholder="e.g., New Delhi"
-                    value={form.origin}
-                    onChange={(e) => updateField("origin", e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="destination"
-                    className="block text-sm font-medium text-muted mb-2"
-                  >
-                    To
-                  </label>
-                  <input
-                    id="destination"
-                    type="text"
-                    className="input-field"
-                    placeholder="e.g., Bali, Indonesia"
-                    value={form.destination}
-                    onChange={(e) => updateField("destination", e.target.value)}
-                  />
-                </div>
-              </motion.div>
-            )}
-
-            {/* Step 2: When & Who */}
-            {currentStep === 2 && (
-              <motion.div
-                key="step2"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
-                className="space-y-6"
-              >
-                <div>
-                  <label
-                    htmlFor="days"
-                    className="block text-sm font-medium text-muted mb-2"
-                  >
-                    Duration (days)
-                  </label>
-                  <input
-                    id="days"
-                    type="number"
-                    className="input-field"
-                    placeholder="e.g., 5"
-                    min={1}
-                    max={30}
-                    value={form.days}
-                    onChange={(e) =>
-                      updateField("days", parseInt(e.target.value) || 1)
-                    }
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="travelers"
-                    className="block text-sm font-medium text-muted mb-2"
-                  >
-                    Number of Travelers
-                  </label>
-                  <input
-                    id="travelers"
-                    type="number"
-                    className="input-field"
-                    placeholder="e.g., 2"
-                    min={1}
-                    max={20}
-                    value={form.travelers}
-                    onChange={(e) =>
-                      updateField("travelers", parseInt(e.target.value) || 1)
-                    }
-                  />
-                </div>
-              </motion.div>
-            )}
-
-            {/* Step 3: Preferences */}
-            {currentStep === 3 && (
-              <motion.div
-                key="step3"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
-                className="space-y-6"
-              >
-                {/* Budget */}
-                <div>
-                  <label className="block text-sm font-medium text-muted mb-3">
-                    Budget
-                  </label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {budgetOptions.map((opt) => (
-                      <button
-                        key={opt.value}
-                        type="button"
-                        onClick={() => updateField("budget", opt.value)}
-                        className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
-                          form.budget === opt.value
-                            ? "bg-accent text-white"
-                            : "bg-card border border-card-border text-muted hover:border-accent/30"
-                        }`}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
+        <Card className="glass-card border-0 ring-0">
+          <CardContent className="pt-8 pb-0">
+            <AnimatePresence mode="wait">
+              {/* Step 1: Where */}
+              {currentStep === 1 && (
+                <motion.div
+                  key="step1"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-6"
+                >
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="origin"
+                      className="block text-sm font-medium text-muted-foreground"
+                    >
+                      From
+                    </label>
+                    <Input
+                      id="origin"
+                      type="text"
+                      placeholder="e.g., New Delhi"
+                      value={form.origin}
+                      onChange={(e) => updateField("origin", e.target.value)}
+                      className="bg-card border-card-border text-foreground placeholder:text-muted-foreground focus-visible:ring-accent focus-visible:border-accent h-12 rounded-xl px-4"
+                    />
                   </div>
-                </div>
-
-                {/* Hotel Type */}
-                <div>
-                  <label className="block text-sm font-medium text-muted mb-3">
-                    Hotel Type
-                  </label>
-                  <div className="grid grid-cols-3 gap-2">
-                    {hotelTypes.map((ht) => (
-                      <button
-                        key={ht.value}
-                        type="button"
-                        onClick={() => updateField("hotel_type", ht.value)}
-                        className={`py-3 px-3 rounded-lg text-sm font-medium transition-all flex flex-col items-center gap-1 ${
-                          form.hotel_type === ht.value
-                            ? "bg-accent text-white"
-                            : "bg-card border border-card-border text-muted hover:border-accent/30"
-                        }`}
-                      >
-                        <span className="text-xl">{ht.emoji}</span>
-                        {ht.label}
-                      </button>
-                    ))}
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="destination"
+                      className="block text-sm font-medium text-muted-foreground"
+                    >
+                      To
+                    </label>
+                    <Input
+                      id="destination"
+                      type="text"
+                      placeholder="e.g., Bali, Indonesia"
+                      value={form.destination}
+                      onChange={(e) =>
+                        updateField("destination", e.target.value)
+                      }
+                      className="bg-card border-card-border text-foreground placeholder:text-muted-foreground focus-visible:ring-accent focus-visible:border-accent h-12 rounded-xl px-4"
+                    />
                   </div>
-                </div>
+                </motion.div>
+              )}
 
-                {/* Preferences */}
-                <div>
-                  <label className="block text-sm font-medium text-muted mb-3">
-                    What are you into? (pick at least one)
-                  </label>
-                  <div className="flex flex-wrap gap-2">
-                    {preferenceOptions.map((pref) => (
-                      <button
-                        key={pref.id}
-                        type="button"
-                        onClick={() => togglePreference(pref.id)}
-                        className={`py-2 px-4 rounded-full text-sm font-medium transition-all ${
-                          form.preferences.includes(pref.id)
-                            ? "bg-accent text-white"
-                            : "bg-card border border-card-border text-muted hover:border-accent/30"
-                        }`}
-                      >
-                        {pref.label}
-                      </button>
-                    ))}
+              {/* Step 2: When & Who */}
+              {currentStep === 2 && (
+                <motion.div
+                  key="step2"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-6"
+                >
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="days"
+                      className="block text-sm font-medium text-muted-foreground"
+                    >
+                      Duration (days)
+                    </label>
+                    <Input
+                      id="days"
+                      type="number"
+                      placeholder="e.g., 5"
+                      min={1}
+                      max={30}
+                      value={form.days}
+                      onChange={(e) =>
+                        updateField("days", parseInt(e.target.value) || 1)
+                      }
+                      className="bg-card border-card-border text-foreground placeholder:text-muted-foreground focus-visible:ring-accent focus-visible:border-accent h-12 rounded-xl px-4"
+                    />
                   </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="travelers"
+                      className="block text-sm font-medium text-muted-foreground"
+                    >
+                      Number of Travelers
+                    </label>
+                    <Input
+                      id="travelers"
+                      type="number"
+                      placeholder="e.g., 2"
+                      min={1}
+                      max={20}
+                      value={form.travelers}
+                      onChange={(e) =>
+                        updateField(
+                          "travelers",
+                          parseInt(e.target.value) || 1
+                        )
+                      }
+                      className="bg-card border-card-border text-foreground placeholder:text-muted-foreground focus-visible:ring-accent focus-visible:border-accent h-12 rounded-xl px-4"
+                    />
+                  </div>
+                </motion.div>
+              )}
 
-          {/* Navigation */}
-          <div className="flex justify-between mt-8 pt-6 border-t border-card-border">
-            <button
-              type="button"
-              onClick={() => setCurrentStep((s) => s - 1)}
-              disabled={currentStep === 1}
-              className="btn-secondary py-2.5! px-5! text-sm! flex items-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
-            >
-              <HiOutlineArrowLeft className="w-4 h-4" /> Back
-            </button>
+              {/* Step 3: Preferences */}
+              {currentStep === 3 && (
+                <motion.div
+                  key="step3"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-6"
+                >
+                  {/* Budget */}
+                  <div>
+                    <label className="block text-sm font-medium text-muted-foreground mb-3">
+                      Budget
+                    </label>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {budgetOptions.map((opt) => (
+                        <Button
+                          key={opt.value}
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => updateField("budget", opt.value)}
+                          className={cn(
+                            "h-auto py-2 px-3 text-sm font-medium rounded-lg transition-all",
+                            form.budget === opt.value
+                              ? "bg-accent text-white border-accent hover:bg-accent/90 hover:text-white"
+                              : "bg-card border-card-border text-muted-foreground hover:border-accent/30 hover:bg-card hover:text-foreground"
+                          )}
+                        >
+                          {opt.label}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
 
-            {currentStep < 3 ? (
-              <button
+                  {/* Hotel Type */}
+                  <div>
+                    <label className="block text-sm font-medium text-muted-foreground mb-3">
+                      Hotel Type
+                    </label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {hotelTypes.map((ht) => (
+                        <Button
+                          key={ht.value}
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => updateField("hotel_type", ht.value)}
+                          className={cn(
+                            "h-auto py-3 px-3 text-sm font-medium rounded-lg transition-all flex flex-col items-center gap-1",
+                            form.hotel_type === ht.value
+                              ? "bg-accent text-white border-accent hover:bg-accent/90 hover:text-white"
+                              : "bg-card border-card-border text-muted-foreground hover:border-accent/30 hover:bg-card hover:text-foreground"
+                          )}
+                        >
+                          <span className="text-xl">{ht.emoji}</span>
+                          {ht.label}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Preferences */}
+                  <div>
+                    <label className="block text-sm font-medium text-muted-foreground mb-3">
+                      What are you into? (pick at least one)
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {preferenceOptions.map((pref) => (
+                        <Button
+                          key={pref.id}
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => togglePreference(pref.id)}
+                          className={cn(
+                            "h-auto py-2 px-4 rounded-full text-sm font-medium transition-all",
+                            form.preferences.includes(pref.id)
+                              ? "bg-accent text-white border-accent hover:bg-accent/90 hover:text-white"
+                              : "bg-card border-card-border text-muted-foreground hover:border-accent/30 hover:bg-card hover:text-foreground"
+                          )}
+                        >
+                          {pref.label}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Navigation */}
+            <div className="flex justify-between mt-8 pt-6 pb-8 border-t border-border">
+              <Button
                 type="button"
-                onClick={() => setCurrentStep((s) => s + 1)}
-                disabled={!canProceed()}
-                className="btn-primary py-2.5! px-5! text-sm! flex items-center gap-2"
+                variant="outline"
+                onClick={() => setCurrentStep((s) => s - 1)}
+                disabled={currentStep === 1}
+                className="flex items-center gap-2 border-card-border text-foreground hover:border-accent hover:bg-accent/10 disabled:opacity-30"
               >
-                Next <HiOutlineArrowRight className="w-4 h-4" />
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={handleSubmit}
-                disabled={!canProceed() || isPending}
-                className="btn-primary py-2.5! px-6! text-sm! flex items-center gap-2"
-              >
-                Plan My Trip ✨
-              </button>
-            )}
-          </div>
-        </div>
+                <HiOutlineArrowLeft className="w-4 h-4" /> Back
+              </Button>
+
+              {currentStep < 3 ? (
+                <Button
+                  type="button"
+                  onClick={() => setCurrentStep((s) => s + 1)}
+                  disabled={!canProceed()}
+                  className="btn-primary border-0 h-auto py-2.5 px-5 text-sm flex items-center gap-2"
+                >
+                  Next <HiOutlineArrowRight className="w-4 h-4" />
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={!canProceed() || isPending}
+                  className="btn-primary border-0 h-auto py-2.5 px-6 text-sm flex items-center gap-2"
+                >
+                  Plan My Trip ✨
+                </Button>
+              )}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { HiOutlineGlobeAlt } from "react-icons/hi2";
+import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -25,17 +26,18 @@ export default function Navbar() {
             className={`text-sm font-medium transition-colors ${
               pathname === "/"
                 ? "text-accent"
-                : "text-muted hover:text-foreground"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             Home
           </Link>
-          <Link
-            href="/plan"
-            className="btn-primary !py-2 !px-5 !text-sm !rounded-lg flex items-center gap-2"
+          <Button
+            size="sm"
+            className="btn-primary border-0 h-auto py-2 px-5 text-sm rounded-lg flex items-center gap-2"
+            asChild
           >
-            Plan Trip
-          </Link>
+            <Link href="/plan">Plan Trip</Link>
+          </Button>
         </div>
       </div>
     </nav>
