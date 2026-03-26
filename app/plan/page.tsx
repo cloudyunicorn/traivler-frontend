@@ -103,7 +103,8 @@ export default function PlanPage() {
     setCompletedNodes([]);
     
     try {
-      const response = await fetch("http://localhost:8000/stream-plan", {
+      const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const response = await fetch(`${API_BASE}/stream-plan`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form)
