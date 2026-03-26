@@ -5,65 +5,64 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* ── Traivler brand tokens (always-dark) ── */
-  --card-border: #1f2937;
-  --accent-light: #fb923c;
-  --accent-glow: rgba(249, 115, 22, 0.15);
-  --coral: #ff6b6b;
-  --teal: #2dd4bf;
-  --purple: #a78bfa;
-  --muted-dark: #6b7280;
-  --surface: #0f172a;
-  --glass: rgba(17, 24, 39, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.06);
+  /* ── Traivler brand tokens (always-dark, Modernized) ── */
+  --card-border: #27272a;
+  --accent-light: #818cf8;
+  --accent-glow: rgba(99, 102, 241, 0.15);
+  --coral: #f43f5e;
+  --teal: #14b8a6;
+  --purple: #a855f7;
+  --muted-dark: #71717a;
+  --surface: #18181b;
+  --glass: rgba(9, 9, 11, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.08);
 
   /* ── shadcn tokens — mapped to Traivler dark palette ── */
-  --background: #030712;
-  --foreground: #f9fafb;
+  --background: #09090b;
+  --foreground: #fafafa;
 
-  --card: #111827;
-  --card-foreground: #f9fafb;
+  --card: #09090b;
+  --card-foreground: #fafafa;
 
-  --popover: #111827;
-  --popover-foreground: #f9fafb;
+  --popover: #09090b;
+  --popover-foreground: #fafafa;
 
-  /* primary = brand accent orange */
-  --primary: #f97316;
+  /* primary = modern indigo */
+  --primary: #4f46e5;
   --primary-foreground: #ffffff;
 
-  --secondary: #1f2937;
-  --secondary-foreground: #f9fafb;
+  --secondary: #27272a;
+  --secondary-foreground: #fafafa;
 
-  --muted: #1f2937;
-  --muted-foreground: #9ca3af;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
 
-  /* accent (shadcn) reused for subtle highlight */
-  --accent: #f97316;
+  --accent: #6366f1;
   --accent-foreground: #ffffff;
 
   --destructive: oklch(0.704 0.191 22.216);
   --destructive-foreground: #ffffff;
 
-  --border: #1f2937;
-  --input: #1f2937;
-  --ring: #f97316;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #6366f1;
 
   --radius: 0.75rem;
 
-  --chart-1: #f97316;
-  --chart-2: #2dd4bf;
-  --chart-3: #a78bfa;
-  --chart-4: #fbbf24;
-  --chart-5: #ff6b6b;
+  --chart-1: #6366f1;
+  --chart-2: #14b8a6;
+  --chart-3: #a855f7;
+  --chart-4: #eab308;
+  --chart-5: #f43f5e;
 
-  --sidebar: #111827;
-  --sidebar-foreground: #f9fafb;
-  --sidebar-primary: #f97316;
+  --sidebar: #09090b;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #4f46e5;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #1f2937;
-  --sidebar-accent-foreground: #f9fafb;
-  --sidebar-border: #1f2937;
-  --sidebar-ring: #f97316;
+  --sidebar-accent: #27272a;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: #27272a;
+  --sidebar-ring: #6366f1;
 }
 
 @theme inline {
@@ -161,30 +160,30 @@ body {
 }
 
 .glass-card {
-  background: linear-gradient(135deg, rgba(17, 24, 39, 0.8), rgba(15, 23, 42, 0.6));
+  background: linear-gradient(135deg, rgba(24, 24, 27, 0.8), rgba(9, 9, 11, 0.6));
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   transition: all 0.3s ease;
 }
 
 .glass-card:hover {
-  border-color: rgba(249, 115, 22, 0.2);
-  box-shadow: 0 8px 32px rgba(249, 115, 22, 0.08);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.12);
   transform: translateY(-2px);
 }
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #f97316, #fb923c, #fbbf24);
+  background: linear-gradient(135deg, #ffffff 30%, #a1a1aa);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.gradient-text-cool {
-  background: linear-gradient(135deg, #2dd4bf, #a78bfa, #f97316);
+.gradient-text-accent {
+  background: linear-gradient(135deg, #6366f1, #a855f7);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -192,7 +191,7 @@ body {
 
 /* Buttons */
 .btn-primary {
-  background: linear-gradient(135deg, #f97316, #ea580c);
+  background: linear-gradient(135deg, #4f46e5, #4338ca);
   color: white;
   padding: 12px 32px;
   border-radius: 12px;
@@ -205,7 +204,7 @@ body {
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
 }
 
 .btn-primary:active {
@@ -278,11 +277,9 @@ body {
 
 /* Selection */
 ::selection {
-  background: rgba(249, 115, 22, 0.3);
+  background: rgba(99, 102, 241, 0.3);
   color: white;
 }
-
-/* App is always dark — tokens are set directly in :root above */
 
 @layer base {
   * {

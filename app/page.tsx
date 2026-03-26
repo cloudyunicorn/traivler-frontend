@@ -80,9 +80,9 @@ export default function Home() {
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Background gradient orbs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-125 h-125 rounded-full bg-accent/5 blur-[120px]" />
-          <div className="absolute -bottom-40 -left-40 w-100 h-100 rounded-full bg-teal/5 blur-[100px]" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 rounded-full bg-purple/3 blur-[150px]" />
+          <div className="absolute -top-[20%] -right-[10%] w-[500px] h-[500px] rounded-full bg-primary/20 blur-[120px]" />
+          <div className="absolute -bottom-[20%] -left-[10%] w-[500px] h-[500px] rounded-full bg-purple/20 blur-[120px]" />
+          <div className="absolute top-[40%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-teal/10 blur-[150px]" />
         </div>
 
         {/* Grid pattern overlay */}
@@ -101,25 +101,25 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-muted-foreground mb-8">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass border border-white/10 text-sm font-medium text-foreground mb-8 shadow-sm">
               <HiOutlineSparkles className="w-4 h-4 text-accent" />
               <span>Powered by AI Agents</span>
             </div>
           </motion.div>
 
           <motion.h1
-            className="text-5xl sm:text-7xl font-bold leading-tight tracking-tight mb-6"
+            className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-8"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
           >
             Plan Your Dream Trip
             <br />
-            <span className="gradient-text">in Seconds</span>
+            <span className="gradient-text-accent">in Seconds</span>
           </motion.h1>
 
           <motion.p
-            className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
+            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed font-medium"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
@@ -137,7 +137,7 @@ export default function Home() {
           >
             <Button
               size="lg"
-              className="btn-primary border-0 h-auto text-lg py-4 px-8 rounded-xl animate-pulse-glow"
+              className="btn-primary border-0 h-auto text-lg py-4 px-8 rounded-full animate-pulse-glow"
               asChild
             >
               <Link href="/plan">Start Planning →</Link>
@@ -145,7 +145,7 @@ export default function Home() {
             <Button
               variant="outline"
               size="lg"
-              className="h-auto text-lg py-4 px-8 rounded-xl border-card-border hover:border-accent hover:bg-accent-glow text-foreground"
+              className="h-auto text-lg py-4 px-8 rounded-full border-card-border hover:border-accent hover:bg-accent-glow text-foreground"
               asChild
             >
               <a href="#features">How It Works</a>
@@ -164,9 +164,9 @@ export default function Home() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">
               Everything You Need,{" "}
-              <span className="gradient-text">One Click Away</span>
+              <span className="gradient-text-accent">One Click Away</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto">
               Our AI agent pipeline handles the heavy lifting so you can focus
@@ -217,12 +217,12 @@ export default function Home() {
           >
             <Card className={cn("glass-card border-0 ring-0 relative overflow-hidden")}>
               {/* Background glow */}
-              <div className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-accent/10 blur-[80px]" />
-              <div className="absolute -bottom-20 -left-20 w-60 h-60 rounded-full bg-teal/10 blur-[80px]" />
+              <div className="absolute -top-20 -right-20 w-80 h-80 rounded-full bg-primary/10 blur-[80px]" />
+              <div className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full bg-purple/10 blur-[80px]" />
 
-              <CardContent className="relative pt-12 pb-12 sm:pt-16 sm:pb-16">
-                <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-                  Ready to <span className="gradient-text">Explore?</span>
+              <CardContent className="relative pt-16 pb-16 sm:pt-20 sm:pb-20">
+                <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-6">
+                  Ready to <span className="gradient-text-accent">Explore?</span>
                 </h2>
                 <p className="text-muted-foreground text-lg mb-8 max-w-lg mx-auto">
                   Tell us where you want to go and let our AI agents handle the
@@ -230,7 +230,7 @@ export default function Home() {
                 </p>
                 <Button
                   size="lg"
-                  className="btn-primary border-0 h-auto text-lg py-4 px-10 rounded-xl"
+                  className="btn-primary border-0 h-auto text-lg py-4 px-10 rounded-full"
                   asChild
                 >
                   <Link href="/plan">Plan My Trip →</Link>
