@@ -101,47 +101,47 @@ export default function PlanPage() {
     setIsStreaming(true);
 
     setCompletedNodes([]);
-    
+
     try {
-      const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://traivler-backend-production.up.railway.app";
       const response = await fetch(`${API_BASE}/stream-plan`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form)
       });
-      
+
       if (!response.ok) throw new Error("Failed to connect to AI agents");
-      
+
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
-      
+
       if (!reader) return;
 
       let finalPlanData = null;
-      
+
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
-        
+
         const chunk = decoder.decode(value, { stream: true });
         const lines = chunk.split("\n\n");
         for (const line of lines) {
           if (line.startsWith("data: ")) {
             const dataStr = line.slice(6);
             if (dataStr.trim() === "") continue;
-            
+
             try {
               const data = JSON.parse(dataStr);
               if (data.node) {
-                 setCompletedNodes(prev => {
-                    if (!prev.includes(data.node)) {
-                       return [...prev, data.node];
-                    }
-                    return prev;
-                 });
+                setCompletedNodes(prev => {
+                  if (!prev.includes(data.node)) {
+                    return [...prev, data.node];
+                  }
+                  return prev;
+                });
               }
               if (data.final_plan) {
-                 finalPlanData = data.final_plan;
+                finalPlanData = data.final_plan;
               }
             } catch (e) {
               console.error("Failed to parse stream chunk", dataStr);
@@ -149,7 +149,7 @@ export default function PlanPage() {
           }
         }
       }
-      
+
       if (finalPlanData) {
         sessionStorage.setItem("tripResult", JSON.stringify(finalPlanData));
         sessionStorage.setItem("tripRequest", JSON.stringify(form));
@@ -157,13 +157,13 @@ export default function PlanPage() {
       } else {
         throw new Error("Pipeline finished without itinerary data.");
       }
-      
+
     } catch (err: any) {
-       console.error(err);
-       toast.error("Pipeline Error", {
-         description: err.message || "An error occurred during planning.",
-       });
-       setIsStreaming(false);
+      console.error(err);
+      toast.error("Pipeline Error", {
+        description: err.message || "An error occurred during planning.",
+      });
+      setIsStreaming(false);
     }
   };
 
@@ -171,9 +171,9 @@ export default function PlanPage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center pt-24 pb-16 px-6">
         <motion.div
-           initial={{ opacity: 0, y: 20 }}
-           animate={{ opacity: 1, y: 0 }}
-           className="text-center w-full max-w-5xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center w-full max-w-5xl mx-auto"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Crafting your <span className="gradient-text-accent">Perfect Trip</span>
@@ -228,8 +228,8 @@ export default function PlanPage() {
                     isActive
                       ? "bg-accent text-white hover:bg-accent/90"
                       : isComplete
-                      ? "bg-accent/20 text-accent hover:bg-accent/30 cursor-pointer"
-                      : "bg-card text-muted-foreground"
+                        ? "bg-accent/20 text-accent hover:bg-accent/30 cursor-pointer"
+                        : "bg-card text-muted-foreground"
                   )}
                 >
                   <StepIcon className="w-4 h-4" />
@@ -237,9 +237,8 @@ export default function PlanPage() {
                 </Button>
                 {i < steps.length - 1 && (
                   <div
-                    className={`w-8 h-px ${
-                      isComplete ? "bg-accent" : "bg-border"
-                    }`}
+                    className={`w-8 h-px ${isComplete ? "bg-accent" : "bg-border"
+                      }`}
                   />
                 )}
               </div>
