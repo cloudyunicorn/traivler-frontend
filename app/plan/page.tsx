@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { usePlanTrip } from "@/hooks/usePlanTrip";
 import { TravelRequest } from "@/types/travel";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import LoadingPipeline from "@/components/ui/LoadingPipeline";
 import {
   HiOutlineMapPin,
   HiOutlineCalendarDays,
@@ -54,6 +55,9 @@ export default function PlanPage() {
   const router = useRouter();
   const { mutate, isPending, isError, error } = usePlanTrip();
   const [currentStep, setCurrentStep] = useState(1);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [completedNodes, setCompletedNodes] = useState<string[]>([]);
+  const [streamError, setStreamError] = useState<string | null>(null);
 
   const [form, setForm] = useState<TravelRequest>({
     origin: "",
@@ -90,31 +94,95 @@ export default function PlanPage() {
   };
 
   const handleSubmit = () => {
-    mutate(form, {
-      onSuccess: (data) => {
-        sessionStorage.setItem("tripResult", JSON.stringify(data));
-        sessionStorage.setItem("tripRequest", JSON.stringify(form));
-        router.push("/results");
-      },
-    });
+    handleStreamSubmit();
   };
 
-  if (isPending) {
+  const handleStreamSubmit = async () => {
+    setIsStreaming(true);
+    setStreamError(null);
+    setCompletedNodes([]);
+    
+    try {
+      const response = await fetch("http://localhost:8000/stream-plan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form)
+      });
+      
+      if (!response.ok) throw new Error("Failed to connect to AI agents");
+      
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      
+      if (!reader) return;
+
+      let finalPlanData = null;
+      
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split("\n\n");
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            const dataStr = line.slice(6);
+            if (dataStr.trim() === "") continue;
+            
+            try {
+              const data = JSON.parse(dataStr);
+              if (data.node) {
+                 setCompletedNodes(prev => {
+                    if (!prev.includes(data.node)) {
+                       return [...prev, data.node];
+                    }
+                    return prev;
+                 });
+              }
+              if (data.final_plan) {
+                 finalPlanData = data.final_plan;
+              }
+            } catch (e) {
+              console.error("Failed to parse stream chunk", dataStr);
+            }
+          }
+        }
+      }
+      
+      if (finalPlanData) {
+        sessionStorage.setItem("tripResult", JSON.stringify(finalPlanData));
+        sessionStorage.setItem("tripRequest", JSON.stringify(form));
+        router.push("/results");
+      } else {
+        throw new Error("Pipeline finished without itinerary data.");
+      }
+      
+    } catch (err: any) {
+       console.error(err);
+       setStreamError(err.message || "An error occurred during planning.");
+       setIsStreaming(false);
+    }
+  };
+
+  if (isStreaming || isPending) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center pt-16">
+      <div className="min-h-screen flex flex-col items-center justify-center pt-24 pb-16 px-6">
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center"
+           initial={{ opacity: 0, y: 20 }}
+           animate={{ opacity: 1, y: 0 }}
+           className="text-center w-full max-w-5xl mx-auto"
         >
-          <h2 className="text-2xl font-bold mb-2">
-            Planning your trip to{" "}
-            <span className="gradient-text">{form.destination}</span>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Crafting your <span className="gradient-text-accent">Perfect Trip</span>
           </h2>
-          <p className="text-muted-foreground mb-8">
-            Our AI agents are working in parallel to find the best options…
+          <p className="text-muted-foreground text-lg mb-12">
+            Our specialized AI agents are working in parallel to build your itinerary...
           </p>
-          <LoadingSpinner />
+          {isStreaming ? (
+            <LoadingPipeline completedNodes={completedNodes} />
+          ) : (
+            <LoadingSpinner />
+          )}
         </motion.div>
       </div>
     );
@@ -177,7 +245,7 @@ export default function PlanPage() {
         </div>
 
         {/* Error Banner */}
-        {isError && (
+        {(isError || streamError) && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -186,7 +254,7 @@ export default function PlanPage() {
             <Alert variant="destructive">
               <AlertDescription>
                 <strong>Error:</strong>{" "}
-                {error?.message || "Something went wrong. Please try again."}
+                {streamError || (error as Error)?.message || "Something went wrong. Please try again."}
               </AlertDescription>
             </Alert>
           </motion.div>
@@ -416,7 +484,7 @@ export default function PlanPage() {
                 <Button
                   type="button"
                   onClick={handleSubmit}
-                  disabled={!canProceed() || isPending}
+                  disabled={!canProceed() || isStreaming || isPending}
                   className="btn-primary border-0 h-auto py-2.5 px-6 text-sm flex items-center gap-2"
                 >
                   Plan My Trip ✨

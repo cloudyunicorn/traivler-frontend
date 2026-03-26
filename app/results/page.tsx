@@ -36,7 +36,7 @@ export default function ResultsPage() {
   if (!result || !request) {
     return (
       <div className="min-h-screen flex items-center justify-center pt-16">
-        <div className="text-muted">Loading results…</div>
+        <div className="text-muted-foreground">Loading results…</div>
       </div>
     );
   }
@@ -53,9 +53,9 @@ export default function ResultsPage() {
           <div>
             <h1 className="text-3xl font-bold">
               Your Trip to{" "}
-              <span className="gradient-text">{request.destination}</span>
+              <span className="gradient-text-accent">{request.destination}</span>
             </h1>
-            <p className="text-muted mt-1">
+            <p className="text-muted-foreground mt-1">
               Here&apos;s your AI-crafted travel plan
             </p>
           </div>

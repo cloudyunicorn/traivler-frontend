@@ -26,7 +26,7 @@ export default function SummaryCard({
       transition={{ duration: 0.5 }}
       className="relative overflow-hidden rounded-2xl"
       style={{
-        background: "linear-gradient(135deg, #f97316, #ea580c, #dc2626)",
+        background: "linear-gradient(135deg, #4f46e5, #4338ca, #3730a3)",
       }}
     >
       {/* Background decoration */}

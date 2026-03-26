@@ -39,7 +39,7 @@ export default function FlightCard({ flights }: FlightCardProps) {
               <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
                 Avg. Cost
               </p>
-              <p className="text-xl font-bold gradient-text">{flights.avg_cost}</p>
+              <p className="text-xl font-bold gradient-text-accent">{flights.avg_cost}</p>
             </div>
             <div>
               <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">

@@ -13,8 +13,8 @@ interface CostBreakdownProps {
 
 export default function CostBreakdown({ costs }: CostBreakdownProps) {
   const items = [
-    { label: "Flights", value: costs.flights, color: "#2dd4bf" },
-    { label: "Hotels", value: costs.hotels, color: "#a78bfa" },
+    { label: "Flights", value: costs.flights, color: "#0d9488" },
+    { label: "Hotels", value: costs.hotels, color: "#9333ea" },
   ];
 
   return (
@@ -55,7 +55,7 @@ export default function CostBreakdown({ costs }: CostBreakdownProps) {
           {/* Total */}
           <div className="pt-2 flex items-center justify-between">
             <span className="font-semibold text-foreground">Total Estimate</span>
-            <span className="text-2xl font-bold gradient-text">
+            <span className="text-2xl font-bold gradient-text-accent">
               {costs.total_estimate}
             </span>
           </div>

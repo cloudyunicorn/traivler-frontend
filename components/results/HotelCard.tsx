@@ -33,7 +33,7 @@ export default function HotelCard({ hotels }: HotelCardProps) {
             <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
               Avg. Price / Night
             </p>
-            <p className="text-xl font-bold gradient-text">
+            <p className="text-xl font-bold gradient-text-accent">
               {hotels.avg_price_per_night}
             </p>
           </div>

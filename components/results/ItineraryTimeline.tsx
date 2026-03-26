@@ -50,16 +50,16 @@ export default function ItineraryTimeline({
                       style={{
                         background: `linear-gradient(135deg, ${
                           index % 3 === 0
-                            ? "#f97316"
+                            ? "#4f46e5"
                             : index % 3 === 1
-                            ? "#2dd4bf"
-                            : "#a78bfa"
+                            ? "#0d9488"
+                            : "#9333ea"
                         }, ${
                           index % 3 === 0
-                            ? "#ea580c"
+                            ? "#3730a3"
                             : index % 3 === 1
-                            ? "#14b8a6"
-                            : "#8b5cf6"
+                            ? "#0f766e"
+                            : "#7e22ce"
                         })`,
                       }}
                     >
