@@ -9,6 +9,17 @@ export interface TravelRequest {
   preferences: string[];
   hotel_type?: string;
   transport_mode?: string;
+  // Personalization fields
+  travel_intent: string;
+  group_type: string;
+  age_group: string;
+  has_kids: boolean;
+  fitness_level: string;
+  food_preferences: string[];
+  trip_pace: string;
+  must_avoid: string[];
+  special_occasion?: string;
+  special_notes?: string;
 }
 
 export interface FlightInfo {
