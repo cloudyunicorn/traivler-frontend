@@ -21,6 +21,8 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { AirportAutocomplete } from "@/components/forms/AirportAutocomplete";
+import { DateRangePicker } from "@/components/forms/DateRangePicker";
 
 // --- Option Arrays ---
 
@@ -133,6 +135,8 @@ export default function PlanPage() {
   const [form, setForm] = useState<TravelRequest>({
     origin: "",
     destination: "",
+    start_date: "",
+    end_date: "",
     days: 3,
     budget: "moderate",
     travelers: 2,
@@ -178,7 +182,7 @@ export default function PlanPage() {
   };
 
   const canProceed = () => {
-    if (currentStep === 1) return form.origin.trim() && form.destination.trim();
+    if (currentStep === 1) return form.origin.trim() && form.destination.trim() && form.start_date && form.end_date;
     if (currentStep === 2) return form.days > 0 && form.travelers > 0 && form.group_type && form.age_group;
     if (currentStep === 3) return form.travel_intent && form.trip_pace && form.fitness_level;
     if (currentStep === 4) return form.preferences.length > 0 && form.food_preferences.length > 0;
@@ -372,15 +376,35 @@ export default function PlanPage() {
                   transition={{ duration: 0.3 }}
                   className="space-y-6"
                 >
-                  <div className="space-y-2">
-                    <label htmlFor="origin" className="block text-sm font-medium text-muted-foreground">From</label>
-                    <Input id="origin" type="text" placeholder="e.g., New Delhi" value={form.origin}
-                      onChange={(e) => updateField("origin", e.target.value)} className={inputClass} />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="destination" className="block text-sm font-medium text-muted-foreground">To</label>
-                    <Input id="destination" type="text" placeholder="e.g., Bali, Indonesia" value={form.destination}
-                      onChange={(e) => updateField("destination", e.target.value)} className={inputClass} />
+                  <div className="space-y-6">
+                    <AirportAutocomplete
+                      id="origin"
+                      label="From"
+                      placeholder="Search city or airport (e.g., New Delhi)"
+                      value={form.origin}
+                      onChange={(iata) => updateField("origin", iata)}
+                    />
+                    <AirportAutocomplete
+                      id="destination"
+                      label="To"
+                      placeholder="Search city or airport (e.g., Bali)"
+                      value={form.destination}
+                      onChange={(iata) => updateField("destination", iata)}
+                    />
+                    <DateRangePicker
+                      startDate={form.start_date}
+                      endDate={form.end_date}
+                      onStartDateChange={(date) => updateField("start_date", date)}
+                      onEndDateChange={(date) => {
+                        updateField("end_date", date);
+                        // Auto-calculate days from date range
+                        if (form.start_date && date) {
+                          const diffMs = new Date(date + "T00:00:00").getTime() - new Date(form.start_date + "T00:00:00").getTime();
+                          const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+                          if (diffDays > 0) updateField("days", diffDays);
+                        }
+                      }}
+                    />
                   </div>
                 </motion.div>
               )}

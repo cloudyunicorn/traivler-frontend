@@ -3,6 +3,8 @@
 export interface TravelRequest {
   origin: string;
   destination: string;
+  start_date: string; // YYYY-MM-DD
+  end_date: string;   // YYYY-MM-DD
   days: number;
   budget?: string;
   travelers: number;
@@ -41,6 +43,9 @@ export interface DayPlan {
 export interface CostBreakdown {
   flights: string;
   hotels: string;
+  food: string;
+  local_transport: string;
+  activities: string;
   total_estimate: string;
 }
 

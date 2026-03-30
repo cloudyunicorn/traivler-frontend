@@ -15,6 +15,9 @@ export default function CostBreakdown({ costs }: CostBreakdownProps) {
   const items = [
     { label: "Flights", value: costs.flights, color: "#0d9488" },
     { label: "Hotels", value: costs.hotels, color: "#9333ea" },
+    { label: "Food & Dining", value: costs.food, color: "#f59e0b" },
+    { label: "Local Transport", value: costs.local_transport, color: "#3b82f6" },
+    { label: "Activities & Sightseeing", value: costs.activities, color: "#f43f5e" },
   ];
 
   return (
