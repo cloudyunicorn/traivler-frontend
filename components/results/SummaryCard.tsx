@@ -24,7 +24,7 @@ export default function SummaryCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="relative overflow-hidden rounded-2xl"
+      className="relative overflow-hidden rounded-2xl min-w-0"
       style={{
         background: "linear-gradient(135deg, #4f46e5, #4338ca, #3730a3)",
       }}
@@ -33,22 +33,22 @@ export default function SummaryCard({
       <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-white/10 blur-[60px]" />
       <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-white/5 blur-[40px]" />
 
-      <CardContent className="relative pt-8 pb-8">
-        <div className="flex items-center gap-2 mb-4">
-          <HiOutlineSparkles className="w-5 h-5 text-white/80" />
-          <span className="text-sm font-medium text-white/70 uppercase tracking-wider">
+      <CardContent className="relative pt-8 pb-8 min-w-0">
+        <div className="flex items-center gap-2 mb-4 min-w-0">
+          <HiOutlineSparkles className="w-5 h-5 text-white/80 shrink-0" />
+          <span className="text-sm font-medium text-white/70 uppercase tracking-wider truncate">
             Trip Summary
           </span>
         </div>
 
-        <h2 className="text-2xl font-bold text-white mb-1">
+        <h2 className="text-2xl font-bold text-white mb-1 break-words">
           {origin} → {destination}
         </h2>
-        <p className="text-white/70 text-sm mb-4">
+        <p className="text-white/70 text-sm mb-4 truncate">
           {days} days · {travelers} traveler{travelers > 1 ? "s" : ""}
         </p>
 
-        <p className="text-white/90 leading-relaxed">{summary}</p>
+        <p className="text-white/90 leading-relaxed max-w-none break-words whitespace-pre-wrap">{summary}</p>
       </CardContent>
     </motion.div>
   );

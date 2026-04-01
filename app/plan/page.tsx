@@ -135,6 +135,7 @@ export default function PlanPage() {
   const [form, setForm] = useState<TravelRequest>({
     origin: "",
     destination: "",
+    destination_name: "",
     start_date: "",
     end_date: "",
     days: 3,
@@ -183,7 +184,7 @@ export default function PlanPage() {
 
   const canProceed = () => {
     if (currentStep === 1) return form.origin.trim() && form.destination.trim() && form.start_date && form.end_date;
-    if (currentStep === 2) return form.days > 0 && form.travelers > 0 && form.group_type && form.age_group;
+    if (currentStep === 2) return form.travelers > 0 && form.group_type && form.age_group;
     if (currentStep === 3) return form.travel_intent && form.trip_pace && form.fitness_level;
     if (currentStep === 4) return form.preferences.length > 0 && form.food_preferences.length > 0;
     return true; // Step 5 always passes
@@ -389,12 +390,23 @@ export default function PlanPage() {
                       label="To"
                       placeholder="Search city or airport (e.g., Bali)"
                       value={form.destination}
-                      onChange={(iata) => updateField("destination", iata)}
+                      onChange={(iata, name) => {
+                        updateField("destination", iata);
+                        updateField("destination_name", name);
+                      }}
                     />
                     <DateRangePicker
                       startDate={form.start_date}
                       endDate={form.end_date}
-                      onStartDateChange={(date) => updateField("start_date", date)}
+                      onStartDateChange={(date) => {
+                        updateField("start_date", date);
+                        // Recalculate days if end date already exists
+                        if (form.end_date && date) {
+                          const diffMs = new Date(form.end_date + "T00:00:00").getTime() - new Date(date + "T00:00:00").getTime();
+                          const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+                          if (diffDays > 0) updateField("days", diffDays);
+                        }
+                      }}
                       onEndDateChange={(date) => {
                         updateField("end_date", date);
                         // Auto-calculate days from date range
@@ -419,18 +431,11 @@ export default function PlanPage() {
                   transition={{ duration: 0.3 }}
                   className="space-y-6"
                 >
-                  {/* Days & Travelers */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label htmlFor="days" className="block text-sm font-medium text-muted-foreground">Duration (days)</label>
-                      <Input id="days" type="number" min={1} max={30} value={form.days}
-                        onChange={(e) => updateField("days", parseInt(e.target.value) || 1)} className={inputClass} />
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="travelers" className="block text-sm font-medium text-muted-foreground">Travelers</label>
-                      <Input id="travelers" type="number" min={1} max={20} value={form.travelers}
-                        onChange={(e) => updateField("travelers", parseInt(e.target.value) || 1)} className={inputClass} />
-                    </div>
+                  {/* Travelers */}
+                  <div className="space-y-2">
+                    <label htmlFor="travelers" className="block text-sm font-medium text-muted-foreground">Number of Travelers</label>
+                    <Input id="travelers" type="number" min={1} max={20} value={form.travelers}
+                      onChange={(e) => updateField("travelers", parseInt(e.target.value) || 1)} className={inputClass} />
                   </div>
 
                   {/* Group Type */}

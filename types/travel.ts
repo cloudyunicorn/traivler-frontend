@@ -2,7 +2,8 @@
 
 export interface TravelRequest {
   origin: string;
-  destination: string;
+  destination: string;      // IATA / country code (e.g. "GB", "LON")
+  destination_name?: string; // Full human-readable name (e.g. "United Kingdom")
   start_date: string; // YYYY-MM-DD
   end_date: string;   // YYYY-MM-DD
   days: number;

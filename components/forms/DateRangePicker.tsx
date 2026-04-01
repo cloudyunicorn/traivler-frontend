@@ -127,7 +127,7 @@ export function DateRangePicker({
     for (let d = 1; d <= daysInMonth; d++) calendarDays.push(d);
 
     return (
-      <div className="flex-1 min-w-[260px]">
+      <div className="flex-1 min-w-0">
         {/* Month Title */}
         <div className="text-center text-sm font-semibold text-foreground mb-3">
           {MONTHS[month]} {year}
@@ -226,8 +226,8 @@ export function DateRangePicker({
           </button>
         </DialogTrigger>
 
-        <DialogContent className="sm:max-w-[600px] bg-[#0f0f13] border-card-border p-0 gap-0">
-          <DialogHeader className="px-6 pt-5 pb-0">
+        <DialogContent className="w-full max-w-[calc(100vw-1rem)] sm:max-w-[340px] bg-[#0f0f13] border-card-border p-0 gap-0 max-h-[90dvh] overflow-y-auto">
+          <DialogHeader className="px-4 pt-5 pb-0">
             <DialogTitle className="text-lg font-semibold text-foreground">
               {selectingEnd ? "Select return date" : "Select departure date"}
             </DialogTitle>
@@ -240,7 +240,7 @@ export function DateRangePicker({
           </DialogHeader>
 
           {/* Navigation */}
-          <div className="flex items-center justify-between px-6 pt-4 pb-2">
+          <div className="flex items-center justify-between px-4 pt-4 pb-2">
             <button
               type="button"
               onClick={goToPrevMonth}
@@ -249,6 +249,9 @@ export function DateRangePicker({
             >
               <HiOutlineChevronLeft className="w-4 h-4" />
             </button>
+            <span className="text-xs font-semibold text-muted-foreground">
+              {MONTHS[currentMonth]} {currentYear}
+            </span>
             <button
               type="button"
               onClick={goToNextMonth}
@@ -258,14 +261,13 @@ export function DateRangePicker({
             </button>
           </div>
 
-          {/* Two-Month Calendar Grid */}
-          <div className="flex gap-6 px-6 pb-4">
+          {/* Single-Month Calendar Grid */}
+          <div className="px-4 pb-4">
             {renderMonth(currentYear, currentMonth)}
-            {renderMonth(nextMonthYear, nextMonth)}
           </div>
 
           {/* Quick Presets */}
-          <div className="px-6 pb-5 pt-2 border-t border-card-border flex gap-2 flex-wrap">
+          <div className="px-4 pb-5 pt-2 border-t border-card-border flex gap-2 flex-wrap">
             <span className="text-[11px] text-muted-foreground/60 self-center mr-1">Quick:</span>
             {[3, 5, 7, 10, 14].map((n) => {
               const s = new Date();

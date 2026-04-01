@@ -50,16 +50,16 @@ export default function ResultsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <div>
-            <h1 className="text-3xl font-bold">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-3xl font-bold break-words">
               Your Trip to{" "}
               <span className="gradient-text-accent">{request.destination}</span>
             </h1>
-            <p className="text-muted-foreground mt-1">
+            <p className="text-muted-foreground mt-1 truncate">
               Here&apos;s your AI-crafted travel plan
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 shrink-0">
             <Link
               href="/plan"
               className="btn-secondary py-2! px-4! text-sm! flex items-center gap-2"
