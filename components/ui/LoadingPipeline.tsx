@@ -83,19 +83,31 @@ export default function LoadingPipeline({ completedNodes }: LoadingPipelineProps
   };
 
   const Connector = ({ active, completed }: { active: boolean; completed: boolean }) => (
-    <div className="flex-1 px-2 mb-8 hidden sm:block">
-      <div className={cn(
-        "h-1 w-full rounded-full transition-all duration-700",
-        completed ? "bg-primary" :
-        active ? "bg-primary/30 animate-pulse" :
-        "bg-muted"
-      )} />
-    </div>
+    <>
+      {/* Horizontal connector for desktop */}
+      <div className="flex-1 px-2 mb-8 hidden sm:block">
+        <div className={cn(
+          "h-1 w-full rounded-full transition-all duration-700",
+          completed ? "bg-primary" :
+          active ? "bg-primary/30 animate-pulse" :
+          "bg-muted"
+        )} />
+      </div>
+      {/* Vertical connector for mobile */}
+      <div className="w-1 h-6 sm:hidden my-1 rounded-full overflow-hidden bg-muted">
+         <div className={cn(
+           "w-full h-full transition-all duration-700",
+           completed ? "bg-primary" :
+           active ? "bg-primary/30 animate-pulse" :
+           "bg-transparent"
+         )} />
+      </div>
+    </>
   );
 
   return (
-    <div className="w-full max-w-4xl mx-auto py-12 px-4 overflow-x-auto">
-      <div className="flex flex-col sm:flex-row items-center justify-between w-full min-w-[600px] gap-4 sm:gap-0">
+    <div className="w-full max-w-4xl mx-auto py-12 px-4 overflow-x-hidden">
+      <div className="flex flex-col sm:flex-row items-center justify-between w-full sm:min-w-[700px] gap-2 sm:gap-0">
         
         {/* Stage 1: Planner */}
         <NodeIcon icon={HiOutlineSparkles} active={isPlannerActive} completed={hasPlanner} label="Trip Planner" />
