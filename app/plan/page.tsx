@@ -51,6 +51,15 @@ const budgetOptions = [
   { value: "luxury", label: "No Limit" },
 ];
 
+const currencyOptions = [
+  { value: "USD", label: "USD", symbol: "$" },
+  { value: "EUR", label: "EUR", symbol: "€" },
+  { value: "GBP", label: "GBP", symbol: "£" },
+  { value: "INR", label: "INR", symbol: "₹" },
+  { value: "JPY", label: "JPY", symbol: "¥" },
+  { value: "AUD", label: "AUD", symbol: "A$" },
+];
+
 const groupTypeOptions = [
   { value: "solo", label: "Solo", emoji: "🧑" },
   { value: "couple", label: "Couple", emoji: "💑" },
@@ -144,6 +153,7 @@ export default function PlanPage() {
     preferences: [],
     hotel_type: "mid-range",
     transport_mode: "flight",
+    currency: "USD",
     // New personalization fields
     travel_intent: "",
     group_type: "",
@@ -565,6 +575,22 @@ export default function PlanPage() {
                           onClick={() => updateField("budget", opt.value)}
                           className={pillBtn(form.budget === opt.value)}>
                           {opt.label}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Currency */}
+                  <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                    <label className="block text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                      <span>🌍</span> Preferred Currency
+                    </label>
+                    <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                      {currencyOptions.map((opt) => (
+                        <Button key={opt.value} type="button" variant="outline"
+                          onClick={() => updateField("currency", opt.value)}
+                          className={`${pillBtn(form.currency === opt.value)} h-10 text-sm font-medium`}>
+                          <span className="mr-1">{opt.symbol}</span> {opt.label}
                         </Button>
                       ))}
                     </div>

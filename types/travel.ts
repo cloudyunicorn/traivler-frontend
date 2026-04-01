@@ -12,6 +12,7 @@ export interface TravelRequest {
   preferences: string[];
   hotel_type?: string;
   transport_mode?: string;
+  currency?: string;
   // Personalization fields
   travel_intent: string;
   group_type: string;

@@ -53,7 +53,7 @@ export default function ResultsPage() {
           <div className="min-w-0 flex-1">
             <h1 className="text-3xl font-bold break-words">
               Your Trip to{" "}
-              <span className="gradient-text-accent">{request.destination}</span>
+              <span className="gradient-text-accent">{request.destination_name || request.destination}</span>
             </h1>
             <p className="text-muted-foreground mt-1 truncate">
               Here&apos;s your AI-crafted travel plan
@@ -81,7 +81,7 @@ export default function ResultsPage() {
           <SummaryCard
             summary={result.summary}
             origin={request.origin}
-            destination={request.destination}
+            destination={request.destination_name || request.destination}
             days={request.days}
             travelers={request.travelers}
           />

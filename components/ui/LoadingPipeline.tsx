@@ -7,7 +7,8 @@ import {
   HiOutlineBuildingOffice, 
   HiOutlineMapPin, 
   HiOutlineDocumentText, 
-  HiOutlineCog6Tooth 
+  HiOutlineCog6Tooth,
+  HiOutlineCurrencyDollar
 } from "react-icons/hi2";
 import { cn } from "@/lib/utils";
 
@@ -23,6 +24,7 @@ export default function LoadingPipeline({ completedNodes }: LoadingPipelineProps
   const hasHotel = completedNodes.includes("hotel");
   const hasItinerary = completedNodes.includes("itinerary");
   const hasOptimizer = completedNodes.includes("optimizer");
+  const hasCost = completedNodes.includes("cost");
 
   // A node is "active" (animating/loading) if its prerequisites are met but it hasn't completed yet.
   const isPlannerActive = !hasPlanner; 
@@ -35,6 +37,7 @@ export default function LoadingPipeline({ completedNodes }: LoadingPipelineProps
 
   const isItineraryActive = parallelGroupCompleted && !hasItinerary;
   const isOptimizerActive = hasItinerary && !hasOptimizer;
+  const isCostActive = hasOptimizer && !hasCost;
 
   const NodeIcon = ({ 
     icon: Icon, 
@@ -116,7 +119,12 @@ export default function LoadingPipeline({ completedNodes }: LoadingPipelineProps
         <Connector active={isOptimizerActive} completed={hasOptimizer} />
 
         {/* Stage 4: Finalizing Output */}
-        <NodeIcon icon={HiOutlineCog6Tooth} active={isOptimizerActive} completed={hasOptimizer} label="Finalizing" />
+        <NodeIcon icon={HiOutlineCog6Tooth} active={isOptimizerActive} completed={hasOptimizer} label="Structuring" />
+
+        <Connector active={isCostActive} completed={hasCost} />
+
+        {/* Stage 5: Cost Verification */}
+        <NodeIcon icon={HiOutlineCurrencyDollar} active={isCostActive} completed={hasCost} label="Cost Check" />
       </div>
     </div>
   );

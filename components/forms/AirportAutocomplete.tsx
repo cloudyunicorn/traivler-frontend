@@ -42,42 +42,56 @@ export function AirportAutocomplete({
   const justSelected = useRef(false);
 
   useEffect(() => {
+    if (justSelected.current) {
+      justSelected.current = false;
+      return;
+    }
+
+    if (!debouncedSearch || debouncedSearch.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    const controller = new AbortController();
+
     const fetchAirports = async () => {
-      if (justSelected.current) {
-        justSelected.current = false;
-        return;
-      }
-
-      if (!debouncedSearch || debouncedSearch.length < 2) {
-        setSuggestions([]);
-        return;
-      }
-
       try {
-        const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-        const response = await fetch(`${API_BASE}/airports/search?q=${encodeURIComponent(debouncedSearch)}`);
+        const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://traivler-backend-production.up.railway.app";
+        const response = await fetch(
+          `${API_BASE}/airports/search?q=${encodeURIComponent(debouncedSearch)}`,
+          { signal: controller.signal }
+        );
         if (response.ok) {
           const data = await response.json();
           setSuggestions(data);
           setIsOpen(true);
         }
-      } catch (error) {
+      } catch (error: unknown) {
+        // Silently ignore aborted requests (component unmount / fast re-typing)
+        if (error instanceof DOMException && error.name === "AbortError") return;
         console.error("Failed to fetch airports", error);
       }
     };
 
     fetchAirports();
+
+    return () => controller.abort();
   }, [debouncedSearch]);
 
-  // Close dropdown on click outside
+  // Close dropdown on click/touch outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+    const handleClickOutside = (event: Event) => {
+      if (
+        containerRef.current &&
+        event.target instanceof Node &&
+        !containerRef.current.contains(event.target)
+      ) {
         setIsOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    // pointerdown works on both mouse and touch devices
+    document.addEventListener("pointerdown", handleClickOutside);
+    return () => document.removeEventListener("pointerdown", handleClickOutside);
   }, []);
 
   const handleSelect = (airport: Airport) => {
@@ -158,14 +172,17 @@ export function AirportAutocomplete({
       {/* Suggestions Dropdown */}
       {isOpen && suggestions.length > 0 && (
         <div className="absolute z-50 w-full mt-1 overflow-hidden rounded-xl border border-card-border bg-card shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-          <ul className="max-h-[300px] overflow-y-auto py-2">
+          <ul className="max-h-[300px] overflow-y-auto py-2 touch-manipulation">
             {suggestions.map((airport, index) => (
               <li
                 key={`${airport.code}-${index}`}
-                onClick={() => handleSelect(airport)}
+                onPointerDown={(e) => {
+                  e.preventDefault(); // Prevent focus loss from input
+                  handleSelect(airport);
+                }}
                 onMouseEnter={() => setHighlightedIndex(index)}
                 className={cn(
-                  "px-4 py-3 cursor-pointer flex items-center justify-between transition-colors",
+                  "px-4 py-3 cursor-pointer flex items-center justify-between transition-colors select-none",
                   highlightedIndex === index ? "bg-accent/10 text-accent" : "text-foreground hover:bg-accent/5"
                 )}
               >
