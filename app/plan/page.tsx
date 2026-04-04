@@ -209,7 +209,7 @@ export default function PlanPage() {
     setCompletedNodes([]);
 
     try {
-      const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://traivler-backend-production.up.railway.app";
+      const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://traivler-backend.cloudyunicorn.com";
       const response = await fetch(`${API_BASE}/stream-plan`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

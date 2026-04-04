@@ -56,7 +56,7 @@ export function AirportAutocomplete({
 
     const fetchAirports = async () => {
       try {
-        const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://traivler-backend-production.up.railway.app";
+        const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://traivler-backend.cloudyunicorn.com";
         const response = await fetch(
           `${API_BASE}/airports/search?q=${encodeURIComponent(debouncedSearch)}`,
           { signal: controller.signal }
@@ -102,8 +102,8 @@ export function AirportAutocomplete({
       onChange(airport.code, airport.name);
     } else {
       // Show City, Country in the input
-      const displayName = airport.city_name 
-        ? `${airport.city_name}, ${airport.country_name}` 
+      const displayName = airport.city_name
+        ? `${airport.city_name}, ${airport.country_name}`
         : airport.name;
       setInputValue(`${displayName} (${airport.code})`);
       onChange(airport.code, airport.name);
@@ -114,8 +114,8 @@ export function AirportAutocomplete({
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (!isOpen) {
-        if (e.key === "ArrowDown") setIsOpen(true);
-        return;
+      if (e.key === "ArrowDown") setIsOpen(true);
+      return;
     }
 
     switch (e.key) {
@@ -151,7 +151,7 @@ export function AirportAutocomplete({
           onChange={(e) => {
             setInputValue(e.target.value);
             if (e.target.value === "") {
-               onChange("", "");
+              onChange("", "");
             }
           }}
           onFocus={() => {
@@ -163,9 +163,9 @@ export function AirportAutocomplete({
         />
         {/* Floating IATA display if value is set */}
         {value && !isOpen && (
-           <div className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-0.5 rounded-md bg-accent/10 border border-accent/20 text-accent text-xs font-bold pointer-events-none">
-             {value}
-           </div>
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-0.5 rounded-md bg-accent/10 border border-accent/20 text-accent text-xs font-bold pointer-events-none">
+            {value}
+          </div>
         )}
       </div>
 
@@ -218,7 +218,7 @@ export function AirportAutocomplete({
                 {airport.type === "country" ? (
                   <span className="text-[10px] font-medium tracking-wider text-emerald-400/60 uppercase">Country</span>
                 ) : !airport.city_name ? (
-                   <span className="text-xs font-bold tracking-wider text-accent opacity-80">{airport.code}</span>
+                  <span className="text-xs font-bold tracking-wider text-accent opacity-80">{airport.code}</span>
                 ) : null}
               </li>
             ))}
