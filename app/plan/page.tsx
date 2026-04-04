@@ -445,7 +445,14 @@ export default function PlanPage() {
                   <div className="space-y-2">
                     <label htmlFor="travelers" className="block text-sm font-medium text-muted-foreground">Number of Travelers</label>
                     <Input id="travelers" type="number" min={1} max={20} value={form.travelers}
-                      onChange={(e) => updateField("travelers", parseInt(e.target.value) || 1)} className={inputClass} />
+                      onChange={(e) => updateField("travelers", parseInt(e.target.value) || 1)}
+                      onFocus={(e) => {
+                        const target = e.target;
+                        setTimeout(() => {
+                          target.scrollIntoView({ behavior: "smooth", block: "center" });
+                        }, 300);
+                      }}
+                      className={inputClass} />
                   </div>
 
                   {/* Group Type */}
@@ -698,6 +705,12 @@ export default function PlanPage() {
                       placeholder="e.g., We love sunsets, prefer outdoor dining, hate touristy spots..."
                       value={form.special_notes || ""}
                       onChange={(e) => updateField("special_notes", e.target.value.slice(0, 500))}
+                      onFocus={(e) => {
+                        const target = e.target;
+                        setTimeout(() => {
+                          target.scrollIntoView({ behavior: "smooth", block: "center" });
+                        }, 300);
+                      }}
                       maxLength={500}
                       rows={4}
                       className={cn(

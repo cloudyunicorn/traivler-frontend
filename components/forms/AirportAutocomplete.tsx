@@ -154,7 +154,11 @@ export function AirportAutocomplete({
               onChange("", "");
             }
           }}
-          onFocus={() => {
+          onFocus={(e) => {
+            const target = e.target;
+            setTimeout(() => {
+              target.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 300);
             if (suggestions.length > 0) setIsOpen(true);
           }}
           onKeyDown={handleKeyDown}
