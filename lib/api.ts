@@ -1,6 +1,6 @@
 import { TravelRequest, TravelResponse } from "@/types/travel";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://traivler-backend.cloudyunicorn.com";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://traivler-backend-438403597289.us-central1.run.app";
 
 export async function planTrip(data: TravelRequest): Promise<TravelResponse> {
   const response = await fetch(`${API_BASE}/plan-trip`, {
